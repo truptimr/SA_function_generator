@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_WritePWM" Id="{a0fd666b-5412-444f-8043-9178f3f859d1}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_WritePWM
+VAR_INPUT
+	bExecute : BOOL := FALSE;
+	slv_addr : UINT := 0;
+	value : REAL := 0.0;
+END_VAR
+VAR_OUTPUT
+	state : INT := 0;
+	bError : BOOL;
+END_VAR
+VAR
+	fbSdoWrite : FB_EcCoESdoWrite;
+	nErrID : UDINT :=0;
+	sdo_address: UINT := 16#8001;
+	subIndex: BYTE := 7;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbSdoWrite(
+        sNetId          := MAIN.sNetId_local,
+        //nSlaveAddr      := nSlaveAddr,
+		nSlaveAddr :=   slv_addr,
+        nIndex          := sdo_address,
+        nSubIndex       := subIndex,
+        pSrcBuf         := ADR(value),
+        cbBufLen        := SIZEOF(value),
+        bExecute        := bExecute
+);
+state := 1;
+IF NOT fbSdoWrite.bBusy THEN
+        bExecute := FALSE;
+		//done	:= TRUE;
+        IF NOT bError THEN 
+                (* write successful *)
+                bError := FALSE;
+                nErrId := 0;
+        ELSE 
+                (* write failed *)
+                bError := fbSdoWrite.bError;
+                nErrId := fbSdoWrite.nErrId;
+        END_IF
+        fbSdoWrite(bExecute := FALSE);
+		state := 0;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="FB_WritePWM">
+      <LineId Id="20" Count="24" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

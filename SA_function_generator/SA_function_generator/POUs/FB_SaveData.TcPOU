@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="FB_SaveData" Id="{d7cf17ab-01ca-4d95-ad18-00e4f5117c32}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SaveData
+VAR_INPUT
+	//sSrcNetId			: T_AmsNetId;	(* TwinCAT network address of the source file *)
+	sDestNetId			: T_AmsNetId;	(* TwinCAT network address of the destination file *)
+	sDestPathName		: T_MaxString;  (* Destination file path and name *)
+	bExecute			: BOOL;			(* Rising edge start fb execution *)
+	tTimeOut			: TIME := DEFAULT_ADS_TIMEOUT;(* Max. ADS timeout time *)
+	buffRead			: PVOID;
+	cbWriteLen			: UDINT;
+	
+END_VAR
+VAR_OUTPUT
+	bBusy				:BOOL;(* TRUE => File copy execution in progress, FALSE => File copy execution idle *)
+	bError				:BOOL;(* TRUE => Error, FALSE => No error *)
+	nErrId				:UDINT;(* Error code *)
+END_VAR
+VAR
+	fbFileOpen			:FB_FileOpen;
+	fbFileClose			:FB_FileClose;
+	fbFileWrite			: FB_FileWrite;
+	hDestFile			: UINT	:= 0;(* File handle of the source file *)
+	Step				: DWORD;
+	RisingEdge			: R_TRIG;
+	cbReadLength		: UDINT := 0;
+	//				: UDINT := 0;
+	//k					: UDINT := 0;
+	
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[RisingEdge(CLK:=bExecute);
+
+CASE Step OF
+	0:	(* Idle state *)
+		IF RisingEdge.Q THEN
+			bBusy := TRUE;
+			bError:= FALSE;
+			nErrId:=0;
+			Step := 1;
+			cbReadLength:=0;
+			hDestFile:=0;
+		END_IF
+
+
+	1:	(* Open destination file *)
+		fbFileOpen( bExecute := FALSE );
+		fbFileOpen( sNetId := sDestNetId, sPathName := sDestPathName,
+					nMode := FOPEN_MODEWRITE OR FOPEN_MODEBINARY,
+					ePath := PATH_GENERIC, tTimeout := tTimeOut, bExecute := TRUE );
+		Step := Step+1;
+	2:
+		fbFileOpen( bExecute := FALSE );
+		IF NOT fbFileOpen.bBusy THEN
+			IF fbFileOpen.bError THEN
+				nErrId := fbFileOpen.nErrId;
+				bError := TRUE;
+				Step := 50;
+			ELSE
+				hDestFile := fbFileOpen.hFile;
+				Step := Step + 1;
+			END_IF
+		END_IF
+
+
+
+	3:	(* Write data to destination file *)
+		fbFileWrite( bExecute := FALSE );
+		fbFileWrite( sNetId:=sDestNetId, hFile:=hDestFile,
+					pWriteBuff:= buffRead, cbWriteLen:= cbWriteLen,
+					bExecute:=TRUE, tTimeout:=tTimeOut );
+		Step := Step + 1;
+	4:
+		fbFileWrite( bExecute := FALSE );
+		IF NOT fbFileWrite.bBusy THEN
+			IF fbFileWrite.bError THEN
+				nErrId := fbFileWrite.nErrId;
+				bError := TRUE;
+				Step := 50;
+			ELSE
+				Step := 50;
+			END_IF
+		END_IF
+
+	30:	(* Close the destination file *)
+		fbFileClose( bExecute := FALSE );
+		fbFileClose( sNetId:=sDestNetId, hFile:=hDestFile, bExecute:=TRUE, tTimeout:=tTimeOut );
+		Step := Step + 1;
+	31:
+		fbFileClose( bExecute := FALSE );
+		IF NOT fbFileClose.bBusy THEN
+			IF fbFileClose.bError THEN
+				nErrId := fbFileClose.nErrId;
+				bError := TRUE;
+			END_IF
+			Step := 50;
+			hDestFile := 0;
+		END_IF
+
+
+
+	50: (* Error or ready => Cleanup *)
+		IF ( hDestFile <> 0 ) THEN
+			Step := 30; (* Close the destination file*)
+		ELSE
+			Step := 0;	(* Ready *)
+			bBusy := FALSE;
+		END_IF
+
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="FB_SaveData">
+      <LineId Id="37" Count="77" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

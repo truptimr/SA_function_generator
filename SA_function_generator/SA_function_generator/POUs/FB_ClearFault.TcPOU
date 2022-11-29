@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_ClearFault" Id="{4ff16b36-28a3-4da4-bf78-1f0190d7ca22}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ClearFault
+VAR_INPUT
+	bExecute : BOOL := FALSE;
+	slv_addr : UINT := 0;
+END_VAR
+VAR_OUTPUT
+	state : INT := 0;
+	
+	bError : BOOL;
+	
+END_VAR
+VAR
+	fbSdoWrite : FB_EcCoESdoWrite;
+	nErrID : UDINT :=0;
+	sdo_address: UINT := 16#8006;
+	subIndex: BYTE := 1;
+	value : INT := 1;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//IF MAIN.write_action = TRUE THEN
+//	bExecute := TRUE;
+//	IF delay_cycle = 10 THEN
+//		IF slv_addr < 1182 THEN
+//			slv_addr := slv_addr + 1;
+//		ELSE
+//			slv_addr := 1002;
+//		END_IF
+//		CASE  slv_addr OF
+//			1001,1018,1033,1046,1063,1080,1097,1114,1131,1148,1165:
+//			slv_addr := slv_addr+1;
+//		END_CASE
+//		delay_cycle := 1;
+//	ELSE
+//		delay_cycle := delay_cycle+1;	
+//	END_IF
+//ELSE
+//	bExecute := FALSE;
+//	slv_addr := 1002;
+//	index := 1;
+//	delay_cycle := 1;
+//END_IF
+
+fbSdoWrite(
+        sNetId          := MAIN.sNetId_local,
+        //nSlaveAddr      := nSlaveAddr,
+		nSlaveAddr :=   slv_addr,
+        nIndex          := sdo_address,
+        nSubIndex       := subIndex,
+        pSrcBuf         := ADR(value),
+        cbBufLen        := SIZEOF(value),
+        bExecute        := bExecute
+);
+state := 1;
+IF NOT fbSdoWrite.bBusy THEN
+        bExecute := FALSE;
+		//done	:= TRUE;
+        IF NOT bError THEN 
+                (* write successful *)
+                bError := FALSE;
+                nErrId := 0;
+        ELSE 
+                (* write failed *)
+                bError := fbSdoWrite.bError;
+                nErrId := fbSdoWrite.nErrId;
+        END_IF
+        fbSdoWrite(bExecute := FALSE);
+		state := 0;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="FB_ClearFault">
+      <LineId Id="11" Count="46" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

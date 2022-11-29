@@ -1,0 +1,329 @@
+<?xml version="1.0"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.22">
+	<DataTypes>
+		<DataType>
+			<Name GUID="{18071995-0000-0000-0000-002000000005}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..4] OF BIT</Name>
+			<BitSize>5</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000010}">BIT</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>5</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{18071995-0000-0000-0000-002000000010}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..1] OF BYTE</Name>
+			<BitSize>16</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>2</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{18071995-0000-0000-0000-00200000000D}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..12] OF BIT</Name>
+			<BitSize>13</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000010}">BIT</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>13</Elements>
+			</ArrayInfo>
+		</DataType>
+	</DataTypes>
+	<ImageDatas>
+		<ImageData Id="1000">424df8010000000000003600000028000000100000000e0000000100100000000000c2010000120b0000120b00000000000000000000ff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7f397b8c75c6748474a5744a75947aff7fff7fff7fff7fff7fff7fff7fff7f8b7521746374847420706374837441746374ff7fff7fff7fff7fff7fff7fff7f00708374a47400709c7fa47463744274e674ff7fff7fff7fff7fff7fff7fff7fff7f00702074cd79ff7fff7f00740070ff7fff7fff7fff7fff7fff7f5a7fff7fff7f947a0070ff7fff7fff7f0070d67aff7fff7fd67aff7fff7fff7f0070ff7fff7f00709c7fff7fff7fcd796274ff7fff7fff7f00705a7fff7fff7f6274e774ad754975ff7fff7fff7f0070ff7fff7fff7fa5740875ff7fff7fff7f497541740070ff7fff7fff7f0070187fff7fff7ff77a2174ff7fff7fff7fff7f937a217400709c7fff7f317a0070c674ff7fff7f00705a7fff7fff7fff7fff7fff7f087541740070397b0070a4742170ef790775297dff7fff7fff7fff7fff7fff7fff7fac79007000708474a47484742170a57cff7f7b6fff7fff7fff7fff7fff7fff7fff7f397f8b75c6748474c574ac75ff7fd6561863ff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7fff7f0000</ImageData>
+	</ImageDatas>
+	<Project ProjectGUID="{41FCE7C7-8A91-43B7-969B-710582DB1461}" Target64Bit="true" ShowHideConfigurations="#x106">
+		<System>
+			<Settings MaxCpus="4" NonWinCpus="1">
+				<Cpu CpuId="3" BaseTime="2500"/>
+			</Settings>
+			<Tasks>
+				<Task Id="3" Priority="20" CycleTime="10000" AmsPort="350" AdtTasks="true">
+					<Name>PlcTask</Name>
+				</Task>
+			</Tasks>
+		</System>
+		<Plc>
+			<Project GUID="{86FA6A81-C665-42F6-8139-4B89477E5DAB}" Name="SA_function_generator" PrjFilePath="SA_function_generator\SA_function_generator.plcproj" TmcFilePath="SA_function_generator\SA_function_generator.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SA_function_generator\SA_function_generator.tmc">
+					<Name>SA_function_generator Instance</Name>
+					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+					<Vars VarGrpType="1">
+						<Name>PlcTask Inputs</Name>
+						<Var>
+							<Name>MAIN.err_mhb</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.rb_x</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.rb_y</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.rb_z</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.spr_x</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.spr_y</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.spr_z</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.pwm1</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.pwm2</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.pwm3</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.err_f_minmax</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.err_f_step</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.err_cal</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.err_dongle</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.err_locid</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.err_soc</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.err_ff</Name>
+							<Type>BOOL</Type>
+						</Var>
+					</Vars>
+					<Vars VarGrpType="2" AreaNo="1">
+						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>MAIN.enable</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.close_loop</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.msthb</Name>
+							<Comment><![CDATA[ heartbeat]]></Comment>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.sp_x</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.sp_y</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.sp_z</Name>
+							<Type>REAL</Type>
+						</Var>
+					</Vars>
+					<Contexts>
+						<Context>
+							<Id NeedCalleeCall="true">0</Id>
+							<Name>PlcTask</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>20</Priority>
+							<CycleTime>1000000</CycleTime>
+						</Context>
+					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+					</TaskPouOids>
+				</Instance>
+			</Project>
+		</Plc>
+		<Io>
+			<Device Id="1" DevType="111" DevFlags="#x0003" AmsPort="28673" AmsNetId="10.10.16.19.2.1" RemoteName="Device 1 (EtherCAT)" InfoImageId="2">
+				<Name>Device 1 (EtherCAT)</Name>
+				<AddressInfo>
+					<Pnp>
+						<DeviceDesc>Ethernet (TwinCAT-Intel PCI Ethernet Adapter (Gigab</DeviceDesc>
+						<DeviceName>\DEVICE\{999BCA75-B98E-466E-970E-B69DE8287E06}</DeviceName>
+						<DeviceData>54ee75ab70c4</DeviceData>
+					</Pnp>
+				</AddressInfo>
+				<Image Id="1" AddrType="9" ImageType="3">
+					<Name>Image</Name>
+				</Image>
+				<Box Id="1" BoxType="9099" BoxFlags="#x00000020">
+					<Name>Box 1 (m1sa)</Name>
+					<ImageId>1000</ImageId>
+					<EtherCAT SlaveType="2" PdiType="#x0e89" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="3" FoeType="1" VendorId="#x000000f5" ProductCode="#x315a9252" RevisionNo="#x00000001" InfoDataAddr="true" TimeoutStateChange1="2000" TimeoutStateChange2="9000" TimeoutMailbox2="2000" PortPhys="17" MaxSlotCount="256" MaxSlotGroupCount="1" SlotPdoIncrement="1" SlotIndexIncrement="16" Type="m1sa" Desc="m1sa" PortABoxInfo="#x00ffffff">
+						<SyncMan>001080002600010001000000220000018000001026010000</SyncMan>
+						<SyncMan>801080002200010002000000220000018000801022010000</SyncMan>
+						<SyncMan>001114006400010003000000000000001400001164010000</SyncMan>
+						<SyncMan>00142c002000010004000000000000002c00001420010000</SyncMan>
+						<Fmmu>0000000000000000001100020100000001000000000000000000000000000000</Fmmu>
+						<Fmmu>0000000000000000001400010100000002000000000000000000000000000000</Fmmu>
+						<Fmmu>00000000000000000d0800010100000003000000000000000000000000000000</Fmmu>
+						<BootStrapData>0010800080108000</BootStrapData>
+						<Pdo Name="Status process data mapping" Index="#x1a00" Flags="#x0011" SyncMan="3">
+							<Entry Name="enable" Index="#x6000" Sub="#x01">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="loc_led" Index="#x6000" Sub="#x02">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="close_loop" Index="#x6000" Sub="#x03">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="err_force_minmax" Index="#x6000" Sub="#x04">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="err_force_step" Index="#x6000" Sub="#x05">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="err_follow_error" Index="#x6000" Sub="#x06">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="err_calibrated" Index="#x6000" Sub="#x07">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="err_masterhb" Index="#x6000" Sub="#x08">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="err_soc" Index="#x6000" Sub="#x09">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="err_dongle" Index="#x6000" Sub="#x0a">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="err_locid" Index="#x6000" Sub="#x0b">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000005}">ARRAY [0..4] OF BIT</Type>
+							</Entry>
+							<Entry Name="slvhb" Index="#x6000" Sub="#x0d">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="force_rb_X" Index="#x6000" Sub="#x0e">
+								<Type>REAL</Type>
+							</Entry>
+							<Entry Name="force_rb_Y" Index="#x6000" Sub="#x0f">
+								<Type>REAL</Type>
+							</Entry>
+							<Entry Name="force_rb_Z" Index="#x6000" Sub="#x10">
+								<Type>REAL</Type>
+							</Entry>
+							<Entry Name="force_sp_X" Index="#x6000" Sub="#x11">
+								<Type>REAL</Type>
+							</Entry>
+							<Entry Name="force_sp_Y" Index="#x6000" Sub="#x12">
+								<Type>REAL</Type>
+							</Entry>
+							<Entry Name="force_sp_Z" Index="#x6000" Sub="#x13">
+								<Type>REAL</Type>
+							</Entry>
+							<Entry Name="pwm1" Index="#x6000" Sub="#x14">
+								<Type>REAL</Type>
+							</Entry>
+							<Entry Name="pwm2" Index="#x6000" Sub="#x15">
+								<Type>REAL</Type>
+							</Entry>
+							<Entry Name="pwm3" Index="#x6000" Sub="#x16">
+								<Type>REAL</Type>
+							</Entry>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000010}">ARRAY [0..1] OF BYTE</Type>
+							</Entry>
+						</Pdo>
+						<Pdo Name="Control process data mapping" Index="#x1601" InOut="1" Flags="#x0011" SyncMan="2">
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-00200000000D}">ARRAY [0..12] OF BIT</Type>
+							</Entry>
+							<Entry Name="enable" Index="#x7010" Sub="#x02">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="loc_led" Index="#x7010" Sub="#x03">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="close_loop" Index="#x7010" Sub="#x04">
+								<Type>BIT</Type>
+							</Entry>
+							<Entry Name="force_sp_X" Index="#x7010" Sub="#x05">
+								<Type>REAL</Type>
+							</Entry>
+							<Entry Name="force_sp_Y" Index="#x7010" Sub="#x06">
+								<Type>REAL</Type>
+							</Entry>
+							<Entry Name="force_sp_Z" Index="#x7010" Sub="#x07">
+								<Type>REAL</Type>
+							</Entry>
+							<Entry Name="msthb" Index="#x7010" Sub="#x08">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000010}">ARRAY [0..1] OF BYTE</Type>
+							</Entry>
+						</Pdo>
+						<CoeProfile ProfileNo="5001"/>
+					</EtherCAT>
+				</Box>
+				<EtherCAT/>
+			</Device>
+		</Io>
+	</Project>
+	<Mappings>
+		<MappingInfo Identifier="{00000000-2001-0850-0020-500810000403}" Id="#x02030010"/>
+		<OwnerA Name="TIPC^SA_function_generator^SA_function_generator Instance">
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Box 1 (m1sa)">
+				<Link VarA="PlcTask Inputs^MAIN.err_cal" VarB="Status process data mapping^err_calibrated"/>
+				<Link VarA="PlcTask Inputs^MAIN.err_dongle" VarB="Status process data mapping^err_dongle"/>
+				<Link VarA="PlcTask Inputs^MAIN.err_f_minmax" VarB="Status process data mapping^err_force_minmax"/>
+				<Link VarA="PlcTask Inputs^MAIN.err_f_step" VarB="Status process data mapping^err_force_step"/>
+				<Link VarA="PlcTask Inputs^MAIN.err_ff" VarB="Status process data mapping^err_follow_error"/>
+				<Link VarA="PlcTask Inputs^MAIN.err_locid" VarB="Status process data mapping^err_locid"/>
+				<Link VarA="PlcTask Inputs^MAIN.err_mhb" VarB="Status process data mapping^err_masterhb"/>
+				<Link VarA="PlcTask Inputs^MAIN.err_soc" VarB="Status process data mapping^err_soc"/>
+				<Link VarA="PlcTask Inputs^MAIN.pwm1" VarB="Status process data mapping^pwm1"/>
+				<Link VarA="PlcTask Inputs^MAIN.pwm2" VarB="Status process data mapping^pwm2"/>
+				<Link VarA="PlcTask Inputs^MAIN.pwm3" VarB="Status process data mapping^pwm3"/>
+				<Link VarA="PlcTask Inputs^MAIN.rb_x" VarB="Status process data mapping^force_rb_X"/>
+				<Link VarA="PlcTask Inputs^MAIN.rb_y" VarB="Status process data mapping^force_rb_Y"/>
+				<Link VarA="PlcTask Inputs^MAIN.rb_z" VarB="Status process data mapping^force_rb_Z"/>
+				<Link VarA="PlcTask Inputs^MAIN.spr_x" VarB="Status process data mapping^force_sp_X"/>
+				<Link VarA="PlcTask Inputs^MAIN.spr_y" VarB="Status process data mapping^force_sp_Y"/>
+				<Link VarA="PlcTask Inputs^MAIN.spr_z" VarB="Status process data mapping^force_sp_Z"/>
+				<Link VarA="PlcTask Outputs^MAIN.close_loop" VarB="Control process data mapping^close_loop"/>
+				<Link VarA="PlcTask Outputs^MAIN.enable" VarB="Control process data mapping^enable"/>
+				<Link VarA="PlcTask Outputs^MAIN.msthb" VarB="Control process data mapping^msthb"/>
+				<Link VarA="PlcTask Outputs^MAIN.sp_x" VarB="Control process data mapping^force_sp_X"/>
+				<Link VarA="PlcTask Outputs^MAIN.sp_y" VarB="Control process data mapping^force_sp_Y"/>
+				<Link VarA="PlcTask Outputs^MAIN.sp_z" VarB="Control process data mapping^force_sp_Z"/>
+			</OwnerB>
+		</OwnerA>
+	</Mappings>
+</TcSmProject>

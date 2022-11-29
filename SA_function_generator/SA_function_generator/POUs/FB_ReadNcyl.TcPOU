@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_ReadNcyl" Id="{096f4f4b-0156-4811-a06b-e074ad87efc5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ReadNcyl
+VAR_INPUT
+	bExecute : BOOL := FALSE;
+	slv_addr : UINT := 0;
+END_VAR
+VAR_OUTPUT
+	state : INT := 0;
+	bError : BOOL;
+	value : UINT;
+	
+END_VAR
+VAR
+	fbSdoRead : FB_EcCoESdoRead;
+	nErrID : UDINT :=0;
+	sdo_address: UINT := 16#8005;
+	subIndex: BYTE := 5;
+	
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbSdoRead(
+        sNetId          := MAIN.sNetId_local,
+        //nSlaveAddr      := nSlaveAddr,
+		nSlaveAddr :=   slv_addr,
+        nIndex          := sdo_address,
+        nSubIndex       := subIndex,
+        pDstBuf         := ADR(value),
+        cbBufLen        := SIZEOF(value),
+        bExecute        := bExecute
+);
+state := 1;
+IF NOT fbSdoRead.bBusy THEN
+        bExecute := FALSE;
+		//done	:= TRUE;
+        IF NOT bError THEN 
+                (* write successful *)
+                bError := FALSE;
+                nErrId := 0;
+        ELSE 
+                (* write failed *)
+                bError := fbSdoRead.bError;
+                nErrId := fbSdoRead.nErrId;
+        END_IF
+        fbSdoRead(bExecute := FALSE);
+		state := 0;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="FB_ReadNcyl">
+      <LineId Id="62" Count="24" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

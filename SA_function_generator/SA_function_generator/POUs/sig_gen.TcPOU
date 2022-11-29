@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="sig_gen" Id="{58f5b935-fe57-4353-926d-54c97baa1937}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM sig_gen
+VAR
+	FB_sig_gen : FB_CTRL_SIGNAL_GENERATOR;
+	sig_gen_params : ST_CTRL_SIGNAL_GENERATOR_PARAMS :=(eSignalType:=1,tTaskCycleTime := T#1MS,tCtrlCycleTime := T#1MS, tCylceDuration := T#2S,tStart := T#0S,fAmplitude:=10,fOffset:=5);
+	operating_mode : E_CTRL_MODE;
+	manual_auto : INT := 2;
+	fManValue : LREAL;
+	
+	eState    : E_CTRL_STATE;
+    eErrorId  : E_CTRL_ERRORCODES;
+    bError    : BOOL;
+	sig_output : REAL;
+	c: INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[operating_mode := manual_auto;
+IF operating_mode = manual_auto THEN
+	FB_sig_gen(fManValue:=fManValue, eMode :=operating_mode, stParams:=sig_gen_params,eState=>eState,eErrorId=>eErrorId, bError=>bError, fOut=>sig_output);
+	operating_mode := 0;
+	c := c+1;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="sig_gen">
+      <LineId Id="19" Count="4" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

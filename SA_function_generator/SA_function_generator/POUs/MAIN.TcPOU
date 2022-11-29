@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MAIN" Id="{59180f09-19c6-4522-85fb-df79ccf53613}" SpecialFunc="None">
+    <Declaration><![CDATA[
+PROGRAM MAIN
+VAR
+	actions : (idle, clear_all, enable_all, disable_all,read_ncyl,read_alias,read_gains,write_gains,read_file,send_waveform_cmd, send_waveform_pwm);
+	slave_pos : UINT := 1001;	
+	clearfault : FB_ClearFault;
+	readncyl : FB_ReadNcyl;
+	readalias : FB_ReadAlias;
+	readfile : FB_readtextfile;
+	waveform_pwm : FB_WritePWM;
+	state : INT := 2;
+	step : DWORD :=0;
+	bError : BOOL;
+	t_index : UINT :=1;
+	alias : UDINT;
+	ncyl: UINT;
+	signal : ARRAY[1..60000] OF REAL;
+	db : REAL :=14.0;
+	dbi : REAL := 0;
+	pwm : REAL := 0.0;
+	value : REAL := 0.0;
+	
+	sdo_address: UINT;
+	subIndex: BYTE;
+	sNetId_local : T_AmsNetId := '10.10.16.19.2.1';	// Address of this computer 
+	
+// heartbeat
+	msthb AT %Q* : UDINT;
+	enable AT %Q* : BOOL;
+	close_loop AT %Q* : BOOL;
+	sp_x AT %Q* : REAL;
+	sp_y AT %Q* : REAL;
+	sp_z AT %Q* : REAL;
+	rb_x AT %I* : REAL;
+	rb_y AT %I* : REAL;
+	rb_z AT %I* : REAL;
+	spr_x AT %I* : REAL;
+	spr_y AT %I* : REAL;
+	spr_z AT %I* : REAL;
+	pwm1 AT %I* : REAL;
+	pwm2 AT %I* : REAL;
+	pwm3 AT %I* : REAL;
+	
+	err_mhb AT %I* : BOOL;
+	err_f_minmax AT %I* : BOOL;
+	err_f_step AT %I* : BOOL;
+	err_cal AT %I* : BOOL;
+	err_dongle AT %I* : BOOL;
+	err_locid AT %I* : BOOL;
+	err_soc AT %I* : BOOL;
+	err_ff AT %I* : BOOL; 
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// send heartbeat to all SA and EPHS
+
+msthb := msthb + 1;
+
+
+CASE actions OF
+	idle:
+		state := 2;
+		bError := 0;
+		t_index := 1;
+		sp_x := 0;
+		sp_y := 0;
+		sp_z := 0;
+		
+	enable_all :
+		enable := TRUE;
+		close_loop := TRUE;
+		
+	disable_all:
+		enable := FALSE;
+		close_loop := FALSE;
+		
+	clear_all:
+	clearfault(bExecute := TRUE, slv_addr := slave_pos, state => state, bError=> bError );
+	IF state = 0 THEN
+		actions := idle;
+	END_IF
+		
+	read_ncyl :
+		readncyl(bExecute := TRUE, slv_addr := slave_pos, state => state, bError=> bError, value =>ncyl );
+		IF state = 0 THEN
+			actions := idle;
+		END_IF
+		
+	read_alias :
+		readalias(bExecute := TRUE, slv_addr := slave_pos, state => state, bError=> bError, value =>alias );
+		IF state = 0 THEN
+			actions := idle;
+		END_IF
+		
+	read_file :
+		readfile(bread := TRUE,output=>signal,step=>step);
+		IF step = 0 THEN
+			actions := idle;
+		END_IF	
+		
+	send_waveform_cmd :
+	    sp_x := signal[t_index];
+		t_index := t_index+1;
+		IF t_index>60000 THEN
+			t_index := 1;
+		END_IF
+	
+	send_waveform_pwm:
+		waveform_pwm(bExecute := TRUE, slv_addr := slave_pos,value :=  6*signal[t_index], state => state, bError=> bError );
+		t_index := t_index+1;
+		IF t_index>60000 THEN
+			t_index := 1;
+		END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="124" Count="2" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="101" Count="0" />
+      <LineId Id="236" Count="0" />
+      <LineId Id="298" Count="0" />
+      <LineId Id="394" Count="0" />
+      <LineId Id="443" Count="2" />
+      <LineId Id="206" Count="0" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="127" Count="0" />
+      <LineId Id="396" Count="0" />
+      <LineId Id="132" Count="0" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="102" Count="0" />
+      <LineId Id="142" Count="0" />
+      <LineId Id="397" Count="0" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="264" Count="0" />
+      <LineId Id="294" Count="2" />
+      <LineId Id="207" Count="0" />
+      <LineId Id="105" Count="0" />
+      <LineId Id="300" Count="2" />
+      <LineId Id="299" Count="0" />
+      <LineId Id="208" Count="0" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="307" Count="2" />
+      <LineId Id="306" Count="0" />
+      <LineId Id="392" Count="0" />
+      <LineId Id="234" Count="1" />
+      <LineId Id="347" Count="0" />
+      <LineId Id="349" Count="0" />
+      <LineId Id="348" Count="0" />
+      <LineId Id="393" Count="0" />
+      <LineId Id="139" Count="0" />
+      <LineId Id="350" Count="0" />
+      <LineId Id="353" Count="3" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="99" Count="0" />
+      <LineId Id="473" Count="0" />
+      <LineId Id="461" Count="2" />
+      <LineId Id="460" Count="0" />
+      <LineId Id="100" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
